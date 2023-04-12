@@ -1,0 +1,10 @@
+# Project place file
+/Webhook.rbxlx
+
+# Roblox Studio lock files
+/*.rbxlx.lock
+/*.rbxl.lock
+wally.lock
+wally.toml
+foreman.toml
+/Packages

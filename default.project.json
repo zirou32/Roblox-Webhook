@@ -1,0 +1,10 @@
+{
+    "name": "Webhook",
+    "tree": {
+        "$className": "DataModel",
+
+        "ServerScriptService": {
+            "$path": "src/server"
+        }
+    }
+}

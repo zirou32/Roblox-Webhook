@@ -25,7 +25,6 @@ SOFTWARE.
 local HttpService = game:GetService("HttpService")
 local Settings = require(script.Settings)
 local Promise = require(script.Promise)
-local Types = require(script.Types)
 
 local Webhook = {}
 Webhook.__index = Webhook
@@ -44,31 +43,33 @@ local function Callback(fn: () -> ())
 	return pcall(fn)
 end
 
--- Internal functions
-function Webhook.new(webhook: Types.WebhookParams)
-	assert(webhook, "")
+--[[
+
+]]
+function Webhook.new(webhookUrl: string)
 	local self = setmetatable({}, Webhook)
-
-	self.url = webhook.url
-	self.data = webhook.content
-
+	self.webhook = webhookUrl
 	return self
 end
 
-function Webhook:Send()
+function Webhook:Message(message: string)
 	return Callback(function()
-		local DATA = {
-			content = self.data.message,
-		}
-		DATA = HttpService:JSONEncode(DATA)
-		return HttpService:PostAsync(self.url, DATA)
+		local data = HttpService:JSONEncode({ content = message })
+		return HttpService:PostAsync(self.webhook, data)
 	end)
 end
 
-function Webhook:Destroy()
-	self.url = nil
-	self.data = nil
-	self = nil
+function Webhook:Embed(content: string, title: string, message: string)
+	return Callback(function()
+		local data = {
+			["content"] = content,
+			["embeds"] = {
+				{ ["title"] = title, ["description"] = message },
+			},
+		}
+		local jsonData = HttpService:JSONEncode(data)
+		return HttpService:PostAsync(self.webhook, jsonData)
+	end)
 end
 
 return Webhook

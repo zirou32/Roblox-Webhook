@@ -1,6 +1,8 @@
 local Webhook = require(script.Parent.Parent.Webhook)
-local url = ""
-local reports = Webhook.new({ url = url, content = { message = "Message from Roblox Studio" } })
-reports:Send():andThen(function(data)
-	print(data)
+
+local url = "your-webhook-url-here"
+
+local reports = Webhook.new(url)
+reports:Message("New report!"):andThen(function()
+	print("report received!")
 end)

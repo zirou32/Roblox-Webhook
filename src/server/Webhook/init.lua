@@ -1,27 +1,3 @@
---[[
-MIT License
-
-Copyright (c) 2023 Galaxy
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-]]
-
 local HttpService = game:GetService("HttpService")
 local Settings = require(script.Settings)
 local Promise = require(script.Promise)
@@ -44,7 +20,14 @@ local function Callback(fn: () -> ())
 end
 
 --[[
+	Create a new instance of Webhook
 
+	@param webhookUrl	string	the url of the webhook you will use
+	@returns Webhook
+
+	```lua
+	local myWebhook = Webhook.new("your-webhook-url")
+	```
 ]]
 function Webhook.new(webhookUrl: string)
 	local self = setmetatable({}, Webhook)
@@ -52,6 +35,17 @@ function Webhook.new(webhookUrl: string)
 	return self
 end
 
+--[[
+	Send a simple message using your webhook url
+
+	@param message	string	message you wish to send
+	@returns promise
+
+	```lua
+	local myWebhook = Webhook.new("webhook-url")
+	myWebhook:Message("Hello!")
+	```
+]]
 function Webhook:Message(message: string)
 	return Callback(function()
 		local data = HttpService:JSONEncode({ content = message })
@@ -59,6 +53,13 @@ function Webhook:Message(message: string)
 	end)
 end
 
+--[[
+	Send an embed message
+
+	@param content	string	The message that will be displayed above the embed
+	@param title	string	The embed title
+	@param message	string	The embed message
+]]
 function Webhook:Embed(content: string, title: string, message: string)
 	return Callback(function()
 		local data = {
